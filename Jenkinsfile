@@ -2,12 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TF_VERSION = '1.5.7'
-        TF_WORKDIR = './'  // update if your Terraform files are in a subfolder
-    }
-
-    tools {
-        terraform "${TF_VERSION}"
+        TF_WORKDIR = './'
     }
 
     stages {
@@ -40,16 +35,5 @@ pipeline {
                 }
             }
         }
-
-        // Uncomment this stage to auto-apply (CAREFUL in production)
-        /*
-        stage('Terraform Apply') {
-            steps {
-                dir("${TF_WORKDIR}") {
-                    sh 'terraform apply -auto-approve tfplan'
-                }
-            }
-        }
-        */
     }
 }
