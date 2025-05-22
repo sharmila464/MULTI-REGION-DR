@@ -1,29 +1,23 @@
 pipeline {
-    agent any
+    agent { label 'agent-1' }
+
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1'  // update if needed
+    }
 
     stages {
         stage('Terraform Init') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-creds'
-                ]]) {
-                    sh '''
-                        terraform init
-                    '''
+                withCredentials([aws(credentialsId: 'aws-creds')]) {
+                    sh 'terraform init'
                 }
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-creds'
-                ]]) {
-                    sh '''
-                        terraform plan
-                    '''
+                withCredentials([aws(credentialsId: 'aws-creds')]) {
+                    sh 'terraform plan'
                 }
             }
         }
@@ -31,13 +25,8 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 input 'Do you want to apply these changes?'
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-creds'
-                ]]) {
-                    sh '''
-                        terraform apply -auto-approve
-                    '''
+                withCredentials([aws(credentialsId: 'aws-creds')]) {
+                    sh 'terraform apply -auto-approve'
                 }
             }
         }
