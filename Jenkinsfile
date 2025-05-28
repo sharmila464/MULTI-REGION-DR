@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git url: 'https://github.com/sharmila464/MULTI-REGION-DR.git'
+                git branch: 'main', url: 'https://github.com/sharmila464/MULTI-REGION-DR.git'
             }
         }
 
